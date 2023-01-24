@@ -52,7 +52,9 @@ class _AdminState extends State<Admin> {
                                 value.selectImage();
                               },
                               icon: Icon(Icons.image))
-                          : Image.file(value.getImage);
+                          : InkWell(
+                              onTap: () => value.selectImage(),
+                              child: Image.file(value.getImage));
                     },
                   ),
                   const SizedBox(height: 20),
@@ -70,7 +72,6 @@ class _AdminState extends State<Admin> {
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Price",
-                    isObscure: true,
                     controller:
                         Provider.of<AdminProvider>(context).priceController,
                   ),
@@ -79,7 +80,7 @@ class _AdminState extends State<Admin> {
                     builder: (context, value, child) {
                       return CustomButton(
                         isLoading: value.isLoading,
-                        text: "SignUp",
+                        text: "Save Product Info",
                         onTap: () => value.startSaveProductInfo(context),
                       );
                     },

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/providers/home/product_provider.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../models/objects.dart';
@@ -52,6 +54,7 @@ class UserProvider extends ChangeNotifier {
       } else {
         Logger().i('User is signed in!');
         await fetchUser(user.uid);
+        Provider.of<ProductProvider>(context, listen: false).fetchProducts();
         UtilFunctions.navigateTo(context, MainScreen());
       }
     });

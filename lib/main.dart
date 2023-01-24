@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/providers/admin/admin_provider.dart';
 import 'package:grocery_app/providers/auth/signup_provider.dart';
 import 'package:grocery_app/providers/auth/user_provider.dart';
+import 'package:grocery_app/providers/home/product_provider.dart';
 import 'package:grocery_app/screens/splash/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => LoginProvider()),
       ChangeNotifierProvider(create: (context) => UserProvider()),
       ChangeNotifierProvider(create: (context) => AdminProvider()),
+      ChangeNotifierProvider(create: (context) => ProductProvider()),
     ],
     child: const MyApp(),
   ));

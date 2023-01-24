@@ -2,10 +2,13 @@ part of 'objects.dart';
 
 @JsonSerializable()
 class ProductModel {
+  @JsonKey(name: 'id')
   final String productId;
   final String productName;
+  @JsonKey(name: 'description')
   final String desc;
   final double price;
+  @JsonKey(name: 'imageUrl')
   final String image;
 
   ProductModel({

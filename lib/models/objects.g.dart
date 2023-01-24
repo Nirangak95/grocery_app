@@ -19,18 +19,18 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
     };
 
 ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
-      productId: json['productId'] as String,
+      productId: json['id'] as String,
       productName: json['productName'] as String,
-      desc: json['desc'] as String,
+      desc: json['description'] as String,
       price: (json['price'] as num).toDouble(),
-      image: json['image'] as String,
+      image: json['imageUrl'] as String,
     );
 
 Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
     <String, dynamic>{
-      'productId': instance.productId,
+      'id': instance.productId,
       'productName': instance.productName,
-      'desc': instance.desc,
+      'description': instance.desc,
       'price': instance.price,
-      'image': instance.image,
+      'imageUrl': instance.image,
     };

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:grocery_app/controllers/admin_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
@@ -62,11 +63,12 @@ class AdminProvider extends ChangeNotifier {
     try {
       //Start the loader
       setLoading(true);
-      await AuthController().registerUser(
+      await AdminController().saveProductInfo(
         context,
         _proNameController.text,
         _descController.text,
         _priceController.text,
+        _image,
       );
       Logger().i("Success");
 
@@ -75,6 +77,9 @@ class AdminProvider extends ChangeNotifier {
       _priceController.clear();
 
       setLoading(false);
+
+      AlertHelper.showAlert(context, DialogType.success, "Success",
+          "Product info saved successfully");
     } catch (e) {
       setLoading(false);
       Logger().e(e);
