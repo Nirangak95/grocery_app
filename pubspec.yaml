@@ -48,6 +48,7 @@ dependencies:
   json_annotation: ^4.8.0
   image_picker: ^0.8.6
   firebase_storage: ^11.0.10
+  animated_snack_bar: ^0.3.0
 
 dev_dependencies:
   flutter_test:

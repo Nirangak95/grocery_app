@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
     //Ignoring pointer - avoid double clicking when request going
     return IgnorePointer(
       ignoring: isLoading,
-      child: InkWell(
+      child: GestureDetector(
         onTap: onTap,
         child: Container(
           width: 259,

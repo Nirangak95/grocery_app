@@ -8,4 +8,7 @@ class AppColors {
   static const kAsh = Color(0xff9B9B9B);
   static const kRed = Color(0xffF01F0E);
   static const klightGreen = Color(0xff0FA956);
+  static const darkGreen = Color(0xff2E6C00);
+
+  static const lightBlue = Color(0xff7085C3);
 }

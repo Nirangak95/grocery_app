@@ -5,10 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:path/path.dart';
 
 import '../utils/alert_helper.dart';
+import 'file_upload_controller.dart';
 
 class AdminController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -27,7 +26,8 @@ class AdminController {
   ) async {
     try {
       //------ Upload the image file
-      UploadTask? task = uploadFile(image);
+      UploadTask? task =
+          FileUploadController.uploadFile(image, 'productImages');
 
       final snapshot = await task!.whenComplete(() {});
 
@@ -54,27 +54,6 @@ class AdminController {
       AlertHelper.showAlert(context, DialogType.error, "ËRROR", e.code);
     } catch (e) {
       AlertHelper.showAlert(context, DialogType.error, "ËRROR", e.toString());
-    }
-  }
-
-  // ------------ Upload picked Image to Firebase storage bucket
-  UploadTask? uploadFile(File file) {
-    try {
-      //Getting the file name from the file path
-      final String fileName = basename(file.path);
-
-      //Define the file Storage destination in the firebase storage
-      final String destination = 'productImages/$fileName';
-
-      //Creating the firebase storage instance with the destination file location
-      final ref = FirebaseStorage.instance.ref(destination);
-
-      final task = ref.putFile(file);
-
-      return task;
-    } catch (e) {
-      Logger().e(e);
-      return null;
     }
   }
 }

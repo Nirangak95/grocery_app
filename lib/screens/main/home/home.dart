@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/controllers/auth_controller.dart';
+import 'package:grocery_app/screens/main/cart/cart.dart';
 import 'package:grocery_app/utils/app_colors.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
+import 'package:grocery_app/utils/util_functions.dart';
 
 import 'widget/product_grid.dart';
 
@@ -30,7 +32,11 @@ class _HomeState extends State<Home> {
                   SvgPicture.asset(AssetConstants.menuIcon),
                   Row(
                     children: [
-                      SvgPicture.asset(AssetConstants.cartIcon),
+                      IconButton(
+                          onPressed: () {
+                            UtilFunctions.navigateTo(context, Cart());
+                          },
+                          icon: SvgPicture.asset(AssetConstants.cartIcon)),
                       IconButton(
                           icon: const Icon(Icons.logout),
                           onPressed: () async {

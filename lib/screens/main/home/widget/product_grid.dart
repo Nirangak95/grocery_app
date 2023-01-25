@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/models/objects.dart';
-import 'package:grocery_app/providers/home/product_provider.dart';
+import 'package:grocery_app/providers/product/product_provider.dart';
 import 'package:grocery_app/screens/main/product_details/product_details.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
 import 'package:grocery_app/utils/util_functions.dart';
@@ -73,7 +73,7 @@ class ProductTile extends StatelessWidget {
               builder: (context, value, child) {
                 return InkWell(
                   onTap: () {
-                    value.initAddToFav(model);
+                    value.initAddToFav(model, context);
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 8, right: 8),

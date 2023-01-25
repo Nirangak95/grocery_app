@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app/providers/home/product_provider.dart';
+import 'package:grocery_app/providers/product/product_provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -58,5 +61,56 @@ class UserProvider extends ChangeNotifier {
         UtilFunctions.navigateTo(context, MainScreen());
       }
     });
+  }
+
+  // ----------- Image Picker instance
+  final ImagePicker _picker = ImagePicker();
+
+  File _image = File("");
+
+  //Getter for image
+  File get getImage => _image;
+
+  //----- a function to pic a file from gallery
+  Future<void> selectImageAndUpload() async {
+    try {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+
+      // check if the user image selected or not
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+
+        //---- Start uploading the image after picking
+        await updateProfileImage(_image);
+        notifyListeners();
+      } else {
+        Logger().e("No Image selected");
+      }
+    } catch (e) {
+      Logger().e(e.toString());
+    }
+  }
+
+  //Upload and update profile image
+  Future<void> updateProfileImage(File image) async {
+    try {
+      setLoading(true);
+
+      //Start Uploading the image
+      String imgUrl = await AuthController()
+          .uploadAndUpdateProfileImage(_userModel.uid, image);
+
+      if (imgUrl != "") {
+        // update the user model img field with returned the download URL
+        _userModel.img = imgUrl;
+        notifyListeners();
+      }
+
+      setLoading(false);
+    } catch (e) {
+      Logger().e(e);
+      setLoading(false);
+    }
   }
 }

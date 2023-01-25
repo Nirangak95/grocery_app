@@ -10,12 +10,14 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       json['uid'] as String,
       json['name'] as String,
       json['email'] as String,
+      json['img'] as String,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'uid': instance.uid,
       'name': instance.name,
       'email': instance.email,
+      'img': instance.img,
     };
 
 ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(

@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/utils/assets_constants.dart';
 import 'package:logger/logger.dart';
 
 import '../models/objects.dart';
 import '../utils/alert_helper.dart';
+import 'file_upload_controller.dart';
 
 class AuthController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -28,7 +33,8 @@ class AuthController {
       if (credential.user != null) {
         //Save user other data
 
-        await saveUserData(credential.user!.uid, name, email);
+        await saveUserData(UserModel(
+            credential.user!.uid, name, email, AssetConstants.profileImgUrl));
 
         AlertHelper.showAlert(context, DialogType.success, "SUCCESS",
             "User created successfully !");
@@ -77,15 +83,16 @@ class AuthController {
 
   //------------------------- Save User Data ---------------------
 
-  Future<void> saveUserData(String uid, String name, String email) async {
+  Future<void> saveUserData(UserModel model) async {
     return users
-        .doc(uid)
+        .doc(model.uid)
         .set(
-          {
-            'uid': uid,
-            'name': name,
-            'email': email,
-          },
+          model.toJson,
+          // {
+          //   'uid': uid,
+          //   'name': name,
+          //   'email': email,
+          // },
           SetOptions(merge: true),
         )
         .then((value) => Logger().i("User Added"))
@@ -106,6 +113,35 @@ class AuthController {
     } catch (e) {
       Logger().e(e);
       return null;
+    }
+  }
+
+  // -------------- Upload and update user profile and return the image url
+  Future<String> uploadAndUpdateProfileImage(
+    String uid,
+    File image,
+  ) async {
+    try {
+      //------ Upload the image file
+      UploadTask? task =
+          FileUploadController.uploadFile(image, 'profileImages');
+
+      final snapshot = await task!.whenComplete(() {});
+
+      //------- Getting the download URL
+      final String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      //update  the profile image in cloud Firestore
+      await users.doc(uid).update(
+        {
+          'img': downloadUrl,
+        },
+      );
+
+      return downloadUrl;
+    } catch (e) {
+      Logger().e(e);
+      return "";
     }
   }
 }

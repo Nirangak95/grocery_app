@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/screens/main/favourites/Favorites.dart';
 import 'package:grocery_app/screens/main/home/home.dart';
 import 'package:grocery_app/screens/main/profile/profile.dart';
-import 'package:grocery_app/screens/main/search/search.dart';
+import 'package:grocery_app/screens/main/orders/orders.dart';
 import 'package:grocery_app/utils/app_colors.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
 import 'package:logger/logger.dart';
@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     Home(),
     Favorites(),
-    Search(),
+    Orders(),
     Profile(),
   ];
 
@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             InkWell(
               child: SvgPicture.asset(
-                AssetConstants.searchIcon,
+                AssetConstants.menuIcon,
                 color:
                     activeIndex == 2 ? AppColors.primaryColor : AppColors.kAsh,
               ),

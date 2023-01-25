@@ -1,5 +1,7 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grocery_app/controllers/product_controller.dart';
+import 'package:grocery_app/utils/alert_helper.dart';
 import 'package:logger/logger.dart';
 
 import '../../models/objects.dart';
@@ -10,6 +12,19 @@ class ProductProvider extends ChangeNotifier {
 
   //Getter for product list
   List<ProductModel> get products => _products;
+
+  //Getter for related product List
+  List<ProductModel> get relatedProducts {
+    List<ProductModel> relatedProducts = [];
+
+    for (var i = 0; i < _products.length; i++) {
+      if (_products[i].productId != _productModel.productId) {
+        relatedProducts.add(_products[i]);
+      }
+    }
+
+    return relatedProducts;
+  }
 
   bool _isLoading = false;
 
@@ -49,14 +64,23 @@ class ProductProvider extends ChangeNotifier {
   //Getter for favourite products get
   List<ProductModel> get favProducts => _favProducts;
 
-  void initAddToFav(ProductModel model) {
+  void initAddToFav(ProductModel model, BuildContext context) {
     //First check whether fav list already has the object
     if (_favProducts.contains(model)) {
       _favProducts.remove(model);
+
+      // Show snack bar
+      AlertHelper.showSnackBar(
+          "Removed from favouites !", AnimatedSnackBarType.error, context);
+
       notifyListeners();
     } else {
       //adding clicked favaourite product to list
       _favProducts.add(model);
+
+      // Show snack bar
+      AlertHelper.showSnackBar(
+          "Added to favouites !", AnimatedSnackBarType.success, context);
       notifyListeners();
     }
   }
