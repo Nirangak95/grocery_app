@@ -11,11 +11,11 @@ import '../../../../components/custom_text.dart';
 import '../../product_details/product_details.dart';
 
 class OrderTile extends StatelessWidget {
-  const OrderTile({super.key, required this.index});
+  const OrderTile({super.key, required this.index, required this.model});
 
   final int index;
 
-  // final ProductModel model;
+  final OrderModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class OrderTile extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
-                      AssetConstants.dummyImage,
+                      model.items.first.productModel.image,
                       width: 70,
                       height: 70,
                       fit: BoxFit.fill,
@@ -67,7 +67,7 @@ class OrderTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       CustomText(
-                        "Apple x 2",
+                        "${model.items.first.productModel.productName} x ${model.items.first.amount}",
                         fontSize: 14,
                       ),
                     ],
@@ -83,15 +83,15 @@ class OrderTile extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: AppColors.primaryColor,
                         borderRadius: BorderRadiusDirectional.circular(10)),
-                    child: const CustomText(
-                      'Pending',
+                    child: CustomText(
+                      model.orderStatus,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       color: AppColors.kWhite,
                     ),
                   ),
-                  const CustomText(
-                    'Total Rs. 160.00',
+                  CustomText(
+                    'Total Rs. ${model.total}',
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),

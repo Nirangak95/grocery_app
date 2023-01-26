@@ -70,6 +70,8 @@ class CartProvider extends ChangeNotifier {
             .singleWhere((element) => element.id == model.productId)
             .amount *
         model.price;
+
+    notifyListeners();
   }
 
   //Clear Counter
@@ -141,5 +143,11 @@ class CartProvider extends ChangeNotifier {
     }
 
     return count;
+  }
+
+  //Clear Cart
+  void clearCart() {
+    _cartItems.clear();
+    notifyListeners();
   }
 }

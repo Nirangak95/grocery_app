@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/models/objects.dart';
 import 'package:grocery_app/providers/auth/user_provider.dart';
+import 'package:grocery_app/providers/order/order_provider.dart';
 import 'package:grocery_app/providers/product/product_provider.dart';
 import 'package:grocery_app/screens/main/favourites/widgets/favorite_product_tile.dart';
 import 'package:grocery_app/screens/main/orders/widgets/order_tile.dart';
@@ -38,15 +39,24 @@ class _OrdersState extends State<Orders> {
                 ),
                 const SizedBox(height: 20),
                 Expanded(
-                    child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return OrderTile(
-                            index: index + 1,
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 20),
-                        itemCount: 10))
+                  child: Consumer<OrderProvider>(
+                    builder: (context, value, child) {
+                      return value.orders.isEmpty
+                          ? Center(child: CustomText("No Orders"))
+                          : ListView.separated(
+                              itemBuilder: (context, index) {
+                                return OrderTile(
+                                  index: index + 1,
+                                  model: value.orders[index],
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 20),
+                              itemCount: value.orders.length,
+                            );
+                    },
+                  ),
+                )
 
                 // Consumer<ProductProvider>(
                 //   builder: (context, value, child) {

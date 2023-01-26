@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/back_btn.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/providers/cart/cart_provider.dart';
+import 'package:grocery_app/providers/order/order_provider.dart';
 import 'package:grocery_app/screens/main/cart/widgets/cart_tile.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
 import 'package:provider/provider.dart';
@@ -104,13 +105,10 @@ class _CartState extends State<Cart> {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: "Place Order",
+                    isLoading: Provider.of<OrderProvider>(context).isLoading,
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return DialogBoxContent();
-                        },
-                      );
+                      Provider.of<OrderProvider>(context, listen: false)
+                          .createOrder(context);
                     },
                   )
                 ],
@@ -122,9 +120,9 @@ class _CartState extends State<Cart> {
 }
 
 class DialogBoxContent extends StatelessWidget {
-  const DialogBoxContent({
-    Key? key,
-  }) : super(key: key);
+  const DialogBoxContent({Key? key, required this.onTap}) : super(key: key);
+
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +164,7 @@ class DialogBoxContent extends StatelessWidget {
                 bottom: -20,
                 child: CustomButton(
                   text: "See your order",
-                  onTap: () {},
+                  onTap: onTap,
                 ),
               )
             ],

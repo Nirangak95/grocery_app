@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/providers/order/order_provider.dart';
 import 'package:grocery_app/providers/product/product_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -57,7 +58,14 @@ class UserProvider extends ChangeNotifier {
       } else {
         Logger().i('User is signed in!');
         await fetchUser(user.uid);
+
+        //Fetch Product list
         Provider.of<ProductProvider>(context, listen: false).fetchProducts();
+
+        //Fetch Order list
+        Provider.of<OrderProvider>(context, listen: false)
+            .fetchOrders(user.uid);
+
         UtilFunctions.navigateTo(context, MainScreen());
       }
     });

@@ -4,6 +4,7 @@ import 'package:grocery_app/providers/admin/admin_provider.dart';
 import 'package:grocery_app/providers/auth/signup_provider.dart';
 import 'package:grocery_app/providers/auth/user_provider.dart';
 import 'package:grocery_app/providers/cart/cart_provider.dart';
+import 'package:grocery_app/providers/order/order_provider.dart';
 import 'package:grocery_app/providers/product/product_provider.dart';
 import 'package:grocery_app/screens/splash/splash.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => AdminProvider()),
       ChangeNotifierProvider(create: (context) => ProductProvider()),
       ChangeNotifierProvider(create: (context) => CartProvider()),
+      ChangeNotifierProvider(create: (context) => OrderProvider()),
     ],
     child: const MyApp(),
   ));
