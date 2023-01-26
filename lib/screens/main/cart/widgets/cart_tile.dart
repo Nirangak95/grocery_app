@@ -2,20 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:grocery_app/models/objects.dart';
+import 'package:grocery_app/providers/cart/cart_provider.dart';
 import 'package:grocery_app/utils/app_colors.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
 import 'package:grocery_app/utils/size_config.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../components/custom_text.dart';
 
-class CartTile extends StatefulWidget {
-  const CartTile({super.key});
+class CartTile extends StatelessWidget {
+  const CartTile({super.key, required this.model});
 
-  @override
-  State<CartTile> createState() => _CartTileState();
-}
+  final CartItemModel model;
 
-class _CartTileState extends State<CartTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +41,7 @@ class _CartTileState extends State<CartTile> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.network(
-                    AssetConstants.dummyImage,
+                    model.productModel.image,
                     width: 70,
                     height: 70,
                     fit: BoxFit.fill,
@@ -52,20 +52,29 @@ class _CartTileState extends State<CartTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
-                      "vegetable",
+                    CustomText(
+                      model.productModel.productName,
                       fontSize: 14,
                     ),
                     Row(
-                      children: const [
-                        Icon(Icons.add),
+                      children: [
+                        InkWell(
+                            child: Icon(Icons.add),
+                            onTap: () => Provider.of<CartProvider>(context,
+                                    listen: false)
+                                .increaseCartItemCount(model.productModel)),
                         SizedBox(width: 15),
                         CustomText(
-                          '1',
+                          '${model.amount}',
                           fontSize: 14,
                         ),
                         SizedBox(width: 15),
-                        Icon(Icons.remove),
+                        InkWell(
+                            child: Icon(Icons.remove),
+                            onTap: () => Provider.of<CartProvider>(context,
+                                    listen: false)
+                                .decreaseCartItemCount(
+                                    model.productModel, context)),
                       ],
                     ),
                   ],
@@ -76,12 +85,16 @@ class _CartTileState extends State<CartTile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.close,
-                  color: AppColors.kRed,
+                InkWell(
+                  onTap: () => Provider.of<CartProvider>(context, listen: false)
+                      .removeCartItem(model.productModel.productId, context),
+                  child: Icon(
+                    Icons.close,
+                    color: AppColors.kRed,
+                  ),
                 ),
                 CustomText(
-                  'Rs. 200.00',
+                  'Rs. ${model.subTotal}',
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),

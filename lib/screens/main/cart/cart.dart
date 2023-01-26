@@ -5,8 +5,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/back_btn.dart';
 import 'package:grocery_app/components/custom_button.dart';
+import 'package:grocery_app/providers/cart/cart_provider.dart';
 import 'package:grocery_app/screens/main/cart/widgets/cart_tile.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/custom_text.dart';
 import '../../../utils/app_colors.dart';
@@ -43,73 +45,78 @@ class _CartState extends State<Cart> {
             ),
             const SizedBox(height: 28),
             Expanded(
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return CartTile();
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 20),
-                  itemCount: 10),
+              child: Consumer<CartProvider>(
+                builder: (context, value, child) {
+                  return value.cartItems.isEmpty
+                      ? Center(child: CustomText("No cart items"))
+                      : ListView.separated(
+                          itemBuilder: (context, index) {
+                            return CartTile(model: value.cartItems[index]);
+                          },
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 20),
+                          itemCount: value.cartItems.length);
+                },
+              ),
             )
           ],
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        height: 290,
-        color: AppColors.kWhite,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CartAmountRow(
-              name: "Item total",
-              amount: "Rs. 240.00",
-            ),
-            CartAmountRow(
-              name: "Dicount",
-              amount: "Rs. 240.00",
-            ),
-            CartAmountRow(
-              name: "Tax",
-              amount: "Rs. 240.00",
-            ),
-            CartAmountRow(
-              name: "Tax",
-              amount: "Rs. 240.00",
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          height: 290,
+          color: AppColors.kWhite,
+          child: Consumer<CartProvider>(
+            builder: (context, value, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomText(
-                    "Total",
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  CartAmountRow(
+                    name: "Item total",
+                    amount: "Rs. ${value.getCartTotal}",
                   ),
-                  CustomText(
-                    "Rs. 1200.00",
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  CartAmountRow(
+                    name: "Total item count",
+                    amount: "${value.getCartTotalItemCount}",
                   ),
+                  CartAmountRow(
+                    name: "Tax",
+                    amount: "Rs. 0.00",
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          "Total",
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        CustomText(
+                          "Rs. ${value.getCartTotal}",
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: "Place Order",
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DialogBoxContent();
+                        },
+                      );
+                    },
+                  )
                 ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            CustomButton(
-              text: "Place Order",
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return DialogBoxContent();
-                  },
-                );
-              },
-            )
-          ],
-        ),
-      ),
+              );
+            },
+          )),
     );
   }
 }

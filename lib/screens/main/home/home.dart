@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_text.dart';
@@ -8,6 +9,7 @@ import 'package:grocery_app/utils/app_colors.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
 import 'package:grocery_app/utils/util_functions.dart';
 
+import '../../../components/cart_button.dart';
 import 'widget/product_grid.dart';
 
 class Home extends StatefulWidget {
@@ -32,11 +34,8 @@ class _HomeState extends State<Home> {
                   SvgPicture.asset(AssetConstants.menuIcon),
                   Row(
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            UtilFunctions.navigateTo(context, Cart());
-                          },
-                          icon: SvgPicture.asset(AssetConstants.cartIcon)),
+                      CartButton(),
+                      const SizedBox(width: 5),
                       IconButton(
                           icon: const Icon(Icons.logout),
                           onPressed: () async {

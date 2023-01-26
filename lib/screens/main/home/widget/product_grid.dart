@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/models/objects.dart';
+import 'package:grocery_app/providers/cart/cart_provider.dart';
 import 'package:grocery_app/providers/product/product_provider.dart';
 import 'package:grocery_app/screens/main/product_details/product_details.dart';
 import 'package:grocery_app/utils/assets_constants.dart';
@@ -52,6 +53,9 @@ class ProductTile extends StatelessWidget {
       onTap: () {
         //Set Selected product model before navigating to the product details screen
         Provider.of<ProductProvider>(context, listen: false).setProduct(model);
+
+        //Clear the Product Counter
+        Provider.of<CartProvider>(context, listen: false).clearCounter();
 
         UtilFunctions.navigateTo(context, ProductDetails());
       },

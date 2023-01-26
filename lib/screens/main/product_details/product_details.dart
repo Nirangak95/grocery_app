@@ -3,8 +3,10 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/components/back_btn.dart';
+import 'package:grocery_app/components/cart_button.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/models/objects.dart';
+import 'package:grocery_app/providers/cart/cart_provider.dart';
 import 'package:grocery_app/screens/main/product_details/widgets/related_product_tile.dart';
 import 'package:grocery_app/utils/size_config.dart';
 import 'package:provider/provider.dart';
@@ -121,9 +123,28 @@ class _ProductDetailsState extends State<ProductDetails> {
                 SafeArea(
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: CustomButton(
-                      text: "Add to carrt",
-                      onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Consumer<ProductProvider>(
+                            builder: (context, value, child) {
+                              return CustomButton(
+                                text: "Add to cart",
+                                onTap: () {
+                                  //Adding to cart
+                                  Provider.of<CartProvider>(context,
+                                          listen: false)
+                                      .addToCart(value.productModel, context);
+                                },
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 10),
+                          CartButton()
+                        ],
+                      ),
                     ),
                   ),
                 )
